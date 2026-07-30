@@ -1,5 +1,8 @@
 import Image from "next/image";
-import { Phone, MapPin, Mail, Leaf, ShoppingCart } from "lucide-react"; 
+import { 
+  Phone, MapPin, Mail, Leaf, ShoppingCart, 
+  Quote, CheckCircle, Settings, Handshake, TrendingUp 
+} from "lucide-react"; 
 
 export default function Home() {
   const hotline = "0949294969"; 
@@ -48,7 +51,6 @@ export default function Home() {
       <header className="bg-white text-green-900 sticky top-0 z-50 shadow-sm border-b-4 border-green-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <div className="flex items-center">
-            {/* Đảm bảo file logo-helenlife.png đã nằm trong thư mục public */}
             <Image 
               src="/logo-helenlife.png" 
               alt="Helen Life Logo" 
@@ -72,22 +74,93 @@ export default function Home() {
         </div>
       </header>
 
-      {/* HERO SECTION - TẦM NHÌN */}
-      <section id="ve-chung-toi" className="bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-green-50 py-16 border-b-8 border-green-600">
+      {/* TẦM NHÌN (HERO) */}
+      <section className="bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-green-50 py-16 border-b-8 border-green-600">
         <div className="max-w-5xl mx-auto text-center px-4">
           <div className="inline-flex items-center gap-2 bg-white text-green-700 border border-green-700 px-6 py-2 rounded-full text-sm font-bold mb-6 shadow-sm">
             <Leaf size={16} />
-            <span>Nông Nghiệp Xanh - Sạch - Bền Vững</span>
+            <span>Giải Pháp Nông Nghiệp Bền Vững</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-black text-green-800 mb-6 tracking-tighter drop-shadow-sm">
             HELEN LIFE
           </h1>
-          <p className="text-xl text-gray-700 mb-4 leading-relaxed max-w-3xl mx-auto font-medium">
-            Đồng hành cùng nhà nông bằng những giải pháp thực tiễn, sản phẩm chất lượng và dịch vụ tận tâm. 
-          </p>
           <p className="text-2xl text-green-700 font-bold">
             "Dinh Dưỡng Xanh Cho Năng Suất Bền"
           </p>
+        </div>
+      </section>
+
+      {/* VỀ CHÚNG TÔI - LỜI GIỚI THIỆU TỪ CATALOGUE */}
+      <section id="ve-chung-toi" className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-black text-green-900 mb-4">Lời Giới Thiệu</h2>
+            <div className="w-24 h-1.5 bg-green-600 mx-auto rounded-full"></div>
+          </div>
+
+          {/* Nội dung thư ngỏ */}
+          <div className="max-w-5xl mx-auto bg-green-50/50 p-8 md:p-12 rounded-3xl border border-green-100 mb-16 shadow-sm">
+            <p className="font-bold text-gray-900 text-lg mb-6">
+              Kính gửi Quý Đại lý, Đối tác và Quý Nhà nông,
+            </p>
+            <div className="space-y-4 text-gray-700 text-lg leading-relaxed">
+              <p>
+                <strong className="text-green-800">HELEN LIFE</strong> được thành lập với định hướng trở thành đơn vị cung cấp các <strong className="text-green-700">giải pháp dinh dưỡng cây trồng toàn diện</strong>, kết nối những nhà máy sản xuất uy tín với hệ thống phân phối và người nông dân trên khắp Việt Nam.
+              </p>
+              <p>
+                Chúng tôi lựa chọn hợp tác với các nhà máy có năng lực sản xuất, quy trình kiểm soát chất lượng nghiêm ngặt và sản phẩm đã được kiểm chứng trên thực tế. Mỗi sản phẩm trong danh mục đều được tuyển chọn nhằm mang đến <strong className="text-green-700">hiệu quả canh tác ổn định, góp phần cải tạo đất, nâng cao năng suất và phát triển nền nông nghiệp bền vững.</strong>
+              </p>
+              <p>
+                HELEN LIFE không chỉ phân phối sản phẩm, mà còn <strong className="text-green-700">đồng hành cùng khách hàng</strong> thông qua tư vấn kỹ thuật, xây dựng quy trình sử dụng phù hợp với từng loại cây trồng và từng điều kiện canh tác, hướng đến <strong className="text-green-700">hiệu quả kinh tế lâu dài.</strong>
+              </p>
+            </div>
+
+            <div className="mt-8 bg-white p-6 rounded-2xl flex items-start gap-4 border-l-4 border-green-600 shadow-sm">
+              <Quote className="text-green-600 flex-shrink-0" size={36} />
+              <p className="text-xl italic font-medium text-green-900 pt-1">
+                "Đồng hành cùng nhà nông bằng những giải pháp thực tiễn, sản phẩm chất lượng và dịch vụ tận tâm."
+              </p>
+            </div>
+          </div>
+
+          {/* 4 Giá trị cốt lõi */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-green-100 text-center hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+              <div className="w-20 h-20 bg-green-50 text-green-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle size={36} />
+              </div>
+              <h4 className="text-xl font-black text-green-900 mb-3">SẢN PHẨM<br/>CHỌN LỌC</h4>
+              <p className="text-gray-600 leading-relaxed">Hợp tác với các nhà máy uy tín, đảm bảo nguồn gốc và chất lượng.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-green-100 text-center hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+              <div className="w-20 h-20 bg-green-50 text-green-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Settings size={36} />
+              </div>
+              <h4 className="text-xl font-black text-green-900 mb-3">GIẢI PHÁP<br/>KỸ THUẬT</h4>
+              <p className="text-gray-600 leading-relaxed">Đồng hành tư vấn dinh dưỡng theo từng giai đoạn sinh trưởng của cây.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-green-100 text-center hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+              <div className="w-20 h-20 bg-green-50 text-green-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Handshake size={36} />
+              </div>
+              <h4 className="text-xl font-black text-green-900 mb-3">PHÁT TRIỂN<br/>BỀN VỮNG</h4>
+              <p className="text-gray-600 leading-relaxed">Xây dựng mối quan hệ lâu dài với đại lý, nhà phân phối và người nông dân.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-3xl shadow-sm border border-green-100 text-center hover:-translate-y-2 hover:shadow-lg transition-all duration-300">
+              <div className="w-20 h-20 bg-green-50 text-green-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                <TrendingUp size={36} />
+              </div>
+              <h4 className="text-xl font-black text-green-900 mb-3">HIỆU QUẢ<br/>KINH TẾ</h4>
+              <p className="text-gray-600 leading-relaxed">Hướng tới tối ưu chi phí đầu tư và nâng cao giá trị nông sản.</p>
+            </div>
+
+          </div>
+
         </div>
       </section>
 
