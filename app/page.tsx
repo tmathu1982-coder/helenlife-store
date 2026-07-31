@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Phone, MapPin, Mail, Leaf, ShoppingCart, Quote, CheckCircle, Settings, Handshake, TrendingUp } from "lucide-react"; 
 
-// 1. HÀM TỰ ĐỘNG CHUI VÀO LARK LẤY DỮ LIỆU
+// HÀM LẤY DỮ LIỆU TỪ LARK
 async function getProductsFromLark() {
   try {
     const tokenRes = await fetch("https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal", {
@@ -32,10 +32,8 @@ export default async function Home() {
   const hotline = "0949294969"; 
   const hotlineDisplay = "0949.294.969";
 
-  // 2. KÍCH HOẠT HÀM LẤY DỮ LIỆU
   const rawLarkProducts = await getProductsFromLark();
 
-  // 3. CHUYỂN ĐỔI DỮ LIỆU KHỚP VỚI CẤU TRÚC CỘT MỚI
   const products = rawLarkProducts.map((item: any) => {
     const fields = item.fields;
     return {
@@ -44,7 +42,12 @@ export default async function Home() {
       quyCach: fields["Quy Cách"] || "",
       donViTinh: fields["Đơn Vị Tính"] || "",
       price: fields["Giá Bán"] ? `${fields["Giá Bán"].toLocaleString('vi-VN')}đ` : "Liên hệ",
-      image: fields["Hình Ảnh"] ? fields["Hình Ảnh"][0].url : "/logo-helenlife.png",
+      
+      // ĐIỂM THAY ĐỔI: Chuyển hướng ảnh qua Trạm trung chuyển (/api/image)
+      image: fields["Hình Ảnh"] && fields["Hình Ảnh"].length > 0 
+        ? `/api/image?token=${fields["Hình Ảnh"][0].file_token}` 
+        : "/logo-helenlife.png",
+        
       description: fields["Mô Tả"] || "",
       shopeeLink: fields["Link Shopee"]?.link || fields["Link Shopee"] || "#",
     };
@@ -147,14 +150,13 @@ export default async function Home() {
             {products.map((item: any) => (
               <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col">
                 
-                <div className="relative w-full h-56 bg-gray-50 flex items-center justify-center p-4 border-b border-gray-100 overflow-hidden">
+                <div className="relative w-full h-56 bg-white flex items-center justify-center p-4 border-b border-gray-100 overflow-hidden">
                    <Image src={item.image} alt={item.name} fill className="object-contain p-4 group-hover:scale-110 transition-transform duration-500" />
                 </div>
 
                 <div className="p-5 flex-grow flex flex-col">
                   <h3 className="text-lg font-black text-green-900 mb-2 line-clamp-2">{item.name}</h3>
                   
-                  {/* Cập nhật UI hiển thị Quy cách & Đơn vị tính */}
                   {(item.quyCach || item.donViTinh) && (
                     <div className="text-sm text-gray-500 mb-2 font-medium bg-green-50 inline-block px-3 py-1 rounded-md self-start border border-green-100">
                       {item.quyCach && <span>Quy cách: {item.quyCach} </span>}
