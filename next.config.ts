@@ -10,8 +10,9 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   
-  // Cấu hình tải ảnh từ Lark
+  // Cấu hình tải ảnh
   images: {
+    unoptimized: true, // LỆNH BÀI TỐI THƯỢNG: Tắt bộ kiểm duyệt ảnh khắt khe
     remotePatterns: [
       {
         protocol: 'https',
