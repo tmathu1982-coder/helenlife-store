@@ -21,7 +21,7 @@ async function getProductsFromLark() {
     });
     const recordData = await recordRes.json();
     
-    return recordData.data.items || [];
+    return recordData.data?.items || [];
   } catch (error) {
     console.error("Lỗi khi kéo dữ liệu từ Lark:", error);
     return [];
@@ -29,25 +29,36 @@ async function getProductsFromLark() {
 }
 
 export default async function Home() {
-  const hotline = "0949294969"; 
-  const hotlineDisplay = "0949.294.969";
+  // 1. CẬP NHẬT SỐ ĐIỆN THOẠI MỚI
+  const hotline = "0819961163"; 
+  const hotlineDisplay = "081 996 1163";
 
   const rawLarkProducts = await getProductsFromLark();
 
   const products = rawLarkProducts.map((item: any) => {
     const fields = item.fields;
+    
+    // 2. XỬ LÝ GIÁ TIỀN: Thêm dấu chấm cách hàng ngàn
+    let formattedPrice = "Liên hệ";
+    if (fields["Giá Bán"]) {
+      // Ép kiểu về số và loại bỏ ký tự lạ (nếu có)
+      const numPrice = Number(String(fields["Giá Bán"]).replace(/\D/g, ''));
+      if (numPrice > 0) {
+        formattedPrice = numPrice.toLocaleString('vi-VN') + "đ";
+      } else {
+        formattedPrice = fields["Giá Bán"];
+      }
+    }
+
     return {
       id: item.record_id,
       name: fields["Tên Sản Phẩm"] || "Đang cập nhật",
       quyCach: fields["Quy Cách"] || "",
       donViTinh: fields["Đơn Vị Tính"] || "",
-      price: fields["Giá Bán"] ? `${fields["Giá Bán"].toLocaleString('vi-VN')}đ` : "Liên hệ",
-      
-      // ĐIỂM THAY ĐỔI: Chuyển hướng ảnh qua Trạm trung chuyển (/api/image)
+      price: formattedPrice,
       image: fields["Hình Ảnh"] && fields["Hình Ảnh"].length > 0 
         ? `/api/image?token=${fields["Hình Ảnh"][0].file_token}` 
         : "/logo-helenlife.png",
-        
       description: fields["Mô Tả"] || "",
       shopeeLink: fields["Link Shopee"]?.link || fields["Link Shopee"] || "#",
     };
@@ -150,22 +161,27 @@ export default async function Home() {
             {products.map((item: any) => (
               <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-green-100 overflow-hidden hover:shadow-xl transition-all duration-300 group flex flex-col">
                 
-                <div className="relative w-full h-56 bg-white flex items-center justify-center p-4 border-b border-gray-100 overflow-hidden">
-                   <Image src={item.image} alt={item.name} fill className="object-contain p-4 group-hover:scale-110 transition-transform duration-500" />
+                {/* 3. HIỆU ỨNG RÊ CHUỘT XEM FULL MÔ TẢ TRÊN HÌNH ẢNH */}
+                <div className="relative w-full h-56 bg-white flex items-center justify-center p-4 border-b border-gray-100 overflow-hidden cursor-pointer">
+                   <Image src={item.image} alt={item.name} fill className="object-contain p-4 group-hover:scale-105 transition-transform duration-500" />
+                   
+                   {/* Lớp phủ thông tin chi tiết */}
+                   <div className="absolute inset-0 bg-green-900/95 text-white p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-y-auto flex items-center text-center z-10 backdrop-blur-sm">
+                      <p className="text-sm font-medium leading-relaxed w-full">{item.description}</p>
+                   </div>
                 </div>
 
                 <div className="p-5 flex-grow flex flex-col">
-                  <h3 className="text-lg font-black text-green-900 mb-2 line-clamp-2">{item.name}</h3>
+                  <h3 className="text-lg font-black text-green-900 mb-2 line-clamp-2" title={item.name}>{item.name}</h3>
                   
                   {(item.quyCach || item.donViTinh) && (
-                    <div className="text-sm text-gray-500 mb-2 font-medium bg-green-50 inline-block px-3 py-1 rounded-md self-start border border-green-100">
+                    <div className="text-sm text-gray-500 mb-3 font-medium bg-green-50 inline-block px-3 py-1.5 rounded-lg self-start border border-green-100">
                       {item.quyCach && <span>Quy cách: {item.quyCach} </span>}
                       {item.donViTinh && <span>({item.donViTinh})</span>}
                     </div>
                   )}
 
-                  <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-3">{item.description}</p>
-                  <div className="text-xl font-black text-[#EE4D2D] mb-4">{item.price}</div>
+                  <div className="text-2xl font-black text-[#EE4D2D] mb-4 mt-auto">{item.price}</div>
                   
                   <a href={item.shopeeLink} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-[#EE4D2D] text-white py-2.5 rounded-xl font-bold hover:bg-[#d74224] hover:shadow-md transition-all active:scale-95">
                     <ShoppingCart size={18} /> Mua qua Shopee
@@ -188,8 +204,8 @@ export default async function Home() {
               <p className="text-gray-400 font-bold uppercase text-sm mb-1">Công Ty Cổ Phần Đầu Tư Helen Life</p>
               <div className="flex gap-2 justify-center md:justify-start">
                 <p className="text-white bg-gray-800 inline-block px-2 py-0.5 rounded font-mono text-xs border border-gray-700">MST: 0319518283</p>
-                <p className="text-gray-400 text-xs mt-1">Đại diện: NGUYỄN THỊ KIỀU TRANG</p>
               </div>
+              {/* 4. ĐÃ XÓA THÔNG TIN NGƯỜI ĐẠI DIỆN Ở ĐÂY */}
             </div>
           </div>
           <div className="space-y-4 md:pl-10 md:w-1/2 text-sm">
